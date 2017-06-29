@@ -2,6 +2,8 @@ package application;
 
 import java.io.*;
 
+import distribution.queue.QueueManagerProxy;
+
 /**
  * CIn - Centro de Informática
  * IF711 - Programação Concorrente e Distribuída
@@ -16,22 +18,23 @@ import java.io.*;
 
 public class Subscriber {
 	
-	//Fila de Mensagens
+	QueueManagerProxy queueManagerProxy;
 	
 	public Subscriber() {
-		
+		this.queueManagerProxy = new QueueManagerProxy("Subscribe");
 	}
 	
-	public void receive(){
-		
+	public void receive() throws Exception {
+		queueManagerProxy.receive();
 	}
 	
 	public void subscribe(){
 		
 	}
 
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws Exception {
+		Subscriber subcriber = new Subscriber();
+		subcriber.receive();
 	}
 	
 }

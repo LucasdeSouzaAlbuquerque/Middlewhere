@@ -17,7 +17,7 @@ import java.util.*;
 
 public interface IQueueManager {
 	
-	public void send() throws Exception;
+	public void send(String msg) throws Exception;
 	public String receive() throws Exception;
 	
 }

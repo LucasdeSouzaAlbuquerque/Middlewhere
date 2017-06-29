@@ -3,6 +3,9 @@ package application;
 import java.io.*;
 import java.util.*;
 
+import distribution.message.Message;
+import distribution.queue.QueueManagerProxy;
+
 /**
  * CIn - Centro de Informática
  * IF711 - Programação Concorrente e Distribuída
@@ -17,18 +20,20 @@ import java.util.*;
 
 public class Publisher {
 	
-	//Fila de Mensagens
+	QueueManagerProxy queueManagerProxy;
 	
 	public Publisher(){
+		this.queueManagerProxy = new QueueManagerProxy("publisherQueue");
+	}
+	
+	public void send(String message) throws Exception{
+		this.queueManagerProxy.send(message);
 		
 	}
 	
-	public void send(){
-		
-	}
-	
-	public static void main(String[] args){
-		
+	public static void main(String[] args) throws Exception{
+		Publisher publisher = new Publisher();	
+		publisher.send("message-01");
 	}
 	
 }
