@@ -24,9 +24,9 @@ public class Publisher {
 	QueueManagerProxy queueManagerProxy;
 	
 
-	public Publisher(String publisherName){
+	public Publisher(String publisherName) throws Exception{
 		this.publisherName = publisherName; 
-		this.queueManagerProxy = new QueueManagerProxy(publisherName);
+		this.queueManagerProxy = new QueueManagerProxy(publisherName, 8081);
 	}
 	
 	public void send(String message, String topic, String type) throws Exception{

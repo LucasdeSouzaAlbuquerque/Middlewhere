@@ -27,8 +27,8 @@ public class Subscriber {
 	QueueManagerProxy queueManagerProxy;
 	
 	
-	public Subscriber(String name) {
-		this.queueManagerProxy = new QueueManagerProxy(name);
+	public Subscriber(String name) throws Exception {
+		this.queueManagerProxy = new QueueManagerProxy(name, 8080);
 		this.subscriberName = name;
 	}
 	
@@ -92,7 +92,7 @@ public class Subscriber {
 			}
 			
 			subscriber.subscribe(topicList, filterList, typeList);
-			//subscriber.receive();
+			subscriber.receive();
 			
 		}
 		in.close();
