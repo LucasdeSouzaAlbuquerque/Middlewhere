@@ -44,11 +44,14 @@ public class QueueManager {
 			System.out.println("Running, running, running");
 
 			packetUnmarshalled = srh.receive();
+		
 			requestPacketMarshalled = (RequestPacket) marshaller.unmarshall(packetUnmarshalled);
 			
 			switch (requestPacketMarshalled.getHeader().getOperation()) {
-				case "SEND":
-					System.out.println("Send message");
+				case "ADD":
+					System.out.println("Sent message");
+					System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
+					System.out.println(requestPacketMarshalled.getBody().getMessage().getBody().toString());
 					break;
 				case "RECEIVE":
 					System.out.println("Receive message");

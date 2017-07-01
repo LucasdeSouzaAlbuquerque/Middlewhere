@@ -14,30 +14,24 @@ import java.io.*;
  * @author Rodrigo Figueiredo
  */
 
-public class Message implements Serializable {
-	
-	private Header header;
-	private Body body;
+public class PublisherBody extends Body implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public Header getHeader() {
-		return header;
+	public PublisherBody(String message) {
+		super(message);
 	}
-	public void setHeader(Header header) {
-		this.header = header;
+
+	public String getMessage() {
+		return super.getBody();
 	}
-	public Body getBody() {
-		return body;
+
+	public void setMessage(String message) {
+		super.setBody(message);
 	}
-	public void setBody(Body body) {
-		this.body = body;
-	}
+	
 	public String toString(){
-		return this.header.toString() + " - " + this.body.toString();
+		return "#"+super.getBody()+"#";
 	}
-	
-	
-	
 	
 }

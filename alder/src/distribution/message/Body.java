@@ -14,25 +14,25 @@ import java.io.*;
  * @author Rodrigo Figueiredo
  */
 
-public class MessageBody implements Serializable {
+public abstract class Body implements Serializable {
 	
-	private String body;
+	private String body;	
 	private static final long serialVersionUID = 1L;
 
-	public MessageBody(String body){
-		this.body = body;
+	public Body(String message){
+		this.body = message;
 	}
-
+	
 	public String getBody() {
 		return body;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public void setBody(String message) {
+		this.body = message;
 	}
 	
 	public String toString(){
 		return "#"+this.body+"#";
 	}
-	
+
 }

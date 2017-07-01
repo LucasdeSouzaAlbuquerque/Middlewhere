@@ -14,23 +14,24 @@ import java.io.Serializable;
  * @author Rodrigo Figueiredo
  */
 
-public class MessageHeader implements Serializable {
+public class PublisherHeader extends Header implements Serializable {
 
-	private String destination;
 	private String topic;
+	private String type;
 	private static final long serialVersionUID = 1L;
 
-	public MessageHeader(String destination, String topic){
-		this.destination = destination;
+	public PublisherHeader(String destination, String topic, String type){
+		super(destination);
 		this.topic = topic;
+		this.type = type;
 	}
 
 	public String getDestination() {
-		return destination;
+		return super.getDestination();
 	}
 
 	public void setDestination(String destination) {
-		this.destination = destination;		
+		super.setDestination(destination);		
 	}
 	
 	public String getTopic() {
@@ -41,8 +42,16 @@ public class MessageHeader implements Serializable {
 		this.topic = topic;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String toString(){
-		return "#"+this.destination+"#"+this.topic+"#";
+		return "#"+super.getDestination()+"#"+this.topic+"#"+this.type+"#";
 	}
 	
 }

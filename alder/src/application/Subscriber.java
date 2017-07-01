@@ -25,7 +25,7 @@ public class Subscriber {
 	}
 	
 	public void receive() throws Exception {
-		queueManagerProxy.receive();
+		//queueManagerProxy.receive();
 	}
 	
 	public void subscribe(){

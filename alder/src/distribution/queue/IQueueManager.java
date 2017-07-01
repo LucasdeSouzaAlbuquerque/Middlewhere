@@ -17,7 +17,9 @@ import java.util.*;
 
 public interface IQueueManager {
 	
-	public void send(String msg) throws Exception;
-	public String receive() throws Exception;
+	public void add(String msg, String topic, String type) throws Exception;
+	public void subscribe(String topic, String filter, String type) throws Exception;
+	public void check() throws Exception;
+	//public void signal(boolean listening);
 	
 }

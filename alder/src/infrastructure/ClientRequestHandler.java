@@ -40,7 +40,7 @@ public class ClientRequestHandler {
 		
 		sentSize = msg.length;
 		out.writeInt(sentSize);
-		out.write(msg);
+		out.write(msg, 0, sentSize);
 		out.flush();
 		
 	}
@@ -51,7 +51,7 @@ public class ClientRequestHandler {
 		
 		receiveSize = in.readInt();
 		msg = new byte[receiveSize];
-		in.read(msg);
+		in.read(msg, 0, receiveSize);
 		
 		clientSocket.close();
 		out.close();

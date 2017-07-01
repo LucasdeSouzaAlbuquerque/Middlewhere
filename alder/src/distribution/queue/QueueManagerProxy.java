@@ -29,56 +29,80 @@ public class QueueManagerProxy implements IQueueManager {
 		this.queueName = queueName;
 	}
 	
-	public void send(String msg) throws Exception{
+	public void add(String msg, String topic, String type) throws Exception{
+		
+		//TO-DO: Implement Invocation/Requestor
 		
 		ClientRequestHandler crh = new ClientRequestHandler("localhost", queuePort);
 		Marshaller marshaller = new Marshaller();
 		RequestPacket packet = new RequestPacket();
 		Message message = new Message();
 		
-		message.setHeader(new MessageHeader(this.queueName, "TOPIC1"));
-		message.setBody(new MessageBody(msg));
+		message.setHeader(new PublisherHeader(this.queueName, topic, type));
+		message.setBody(new PublisherBody(msg));
 		
 		RequestPacketBody packetBody = new RequestPacketBody();
 		ArrayList<Object> parameters = new ArrayList<Object>(0);
 		
 		packetBody.setParameters(parameters);
 		packetBody.setMessage(message);
-		packet.setHeader(new RequestPacketHeader("SEND"));;
+		packet.setHeader(new RequestPacketHeader("ADD"));;
 		packet.setBody(packetBody);
 		
 		crh.send(marshaller.marshall((Object)packet));
 		
 		return;
 	}
-	
-	public String receive() throws Exception{
-		
-		ClientRequestHandler crh = new ClientRequestHandler("localhost", 1313);
+
+	@Override
+	public void subscribe(String topicList, String filterList, String typeList) throws Exception{
+
+		ClientRequestHandler crh = new ClientRequestHandler("localhost", queuePort);
 		Marshaller marshaller = new Marshaller();
-		RequestPacket requestPacket = new RequestPacket();
-		byte[] unmarshalledReplyPacket = new byte[1024];
+		RequestPacket packet = new RequestPacket();
 		Message message = new Message();
-
-		// configure message
-		message.setHeader(new MessageHeader(this.queueName, "TOPIC1"));
-		message.setBody(new MessageBody("messageBody"));
-
+		
+		message.setHeader(new SubscriberHeader(this.queueName));
+		message.setBody(new SubscriberBody(topicList, filterList, typeList));
+		
 		RequestPacketBody packetBody = new RequestPacketBody();
 		ArrayList<Object> parameters = new ArrayList<Object>(0);
+		
 		packetBody.setParameters(parameters);
 		packetBody.setMessage(message);
-		requestPacket.setHeader(new RequestPacketHeader("RECEIVE"));
-		requestPacket.setBody(packetBody);
-
-		crh.send(marshaller.marshall((Object) requestPacket));
-
-		unmarshalledReplyPacket = crh.receive();
+		packet.setHeader(new RequestPacketHeader("SUBSCRIBE"));;
+		packet.setBody(packetBody);
 		
-		//TODO
-		return "";
+		crh.send(marshaller.marshall((Object)packet));
+		
+		return;
+		
 	}
 
+	public void check() throws Exception{
+
+		ClientRequestHandler crh = new ClientRequestHandler("localhost", queuePort);
+		Marshaller marshaller = new Marshaller();
+		RequestPacket packet = new RequestPacket();
+		Message message = new Message();
+		
+		message.setHeader(new SubscriberHeader(this.queueName));
+		message.setBody(new SubscriberBody("Empty","Empty","Empty"));
+		
+		RequestPacketBody packetBody = new RequestPacketBody();
+		ArrayList<Object> parameters = new ArrayList<Object>(0);
+		
+		packetBody.setParameters(parameters);
+		packetBody.setMessage(message);
+		packet.setHeader(new RequestPacketHeader("CHECK"));;
+		packet.setBody(packetBody);
+		
+		crh.send(marshaller.marshall((Object)packet));
+		
+		return;
+		
+	}
+	
 	public String getQueueName() {
 		return queueName;
 	}
@@ -86,5 +110,7 @@ public class QueueManagerProxy implements IQueueManager {
 	public void setQueueName(String queueName) {
 		this.queueName = queueName;
 	}
+
+	
 	
 }
