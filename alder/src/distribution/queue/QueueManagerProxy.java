@@ -4,6 +4,7 @@ import infrastructure.*;
 import distribution.marshaller.*;
 import distribution.request.*;
 import distribution.message.*;
+import distribution.reply.ReplyPacket;
 
 import java.io.*;
 import java.util.*;
@@ -55,13 +56,14 @@ public class QueueManagerProxy implements IQueueManager {
 	}
 
 	@Override
-	public void subscribe(String topicList, String filterList, String typeList) throws Exception{
+	public void subscribe(ArrayList<String> topicList, ArrayList<String> filterList, ArrayList<String> typeList) 
+			throws Exception{
 
 		ClientRequestHandler crh = new ClientRequestHandler("localhost", queuePort);
 		Marshaller marshaller = new Marshaller();
 		RequestPacket packet = new RequestPacket();
 		Message message = new Message();
-		
+
 		message.setHeader(new SubscriberHeader(this.queueName));
 		message.setBody(new SubscriberBody(topicList, filterList, typeList));
 		
@@ -79,7 +81,7 @@ public class QueueManagerProxy implements IQueueManager {
 		
 	}
 
-	public void check() throws Exception{
+	public boolean check() throws Exception{
 
 		ClientRequestHandler crh = new ClientRequestHandler("localhost", queuePort);
 		Marshaller marshaller = new Marshaller();
@@ -87,7 +89,7 @@ public class QueueManagerProxy implements IQueueManager {
 		Message message = new Message();
 		
 		message.setHeader(new SubscriberHeader(this.queueName));
-		message.setBody(new SubscriberBody("Empty","Empty","Empty"));
+		message.setBody(new SubscriberBody(null,null,null));
 		
 		RequestPacketBody packetBody = new RequestPacketBody();
 		ArrayList<Object> parameters = new ArrayList<Object>(0);
@@ -98,8 +100,14 @@ public class QueueManagerProxy implements IQueueManager {
 		packet.setBody(packetBody);
 		
 		crh.send(marshaller.marshall((Object)packet));
+
+		byte[] packetUnmarshalled = new byte[1024];
+		ReplyPacket replyPacketMarshalled = new ReplyPacket();
 		
-		return;
+		packetUnmarshalled = crh.receive();
+		replyPacketMarshalled = (ReplyPacket) marshaller.unmarshall(packetUnmarshalled);
+		
+		return false;
 		
 	}
 	
@@ -109,6 +117,12 @@ public class QueueManagerProxy implements IQueueManager {
 
 	public void setQueueName(String queueName) {
 		this.queueName = queueName;
+	}
+
+	@Override
+	public void listen() throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

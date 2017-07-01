@@ -5,6 +5,12 @@ import java.net.*;
 import java.util.*;
 
 import distribution.marshaller.Marshaller;
+import distribution.message.Message;
+import distribution.message.SubscriberBody;
+import distribution.message.SubscriberHeader;
+import distribution.reply.ReplyPacket;
+import distribution.reply.ReplyPacketBody;
+import distribution.reply.ReplyPacketHeader;
 import infrastructure.ServerRequestHandler;
 import distribution.request.*;
 
@@ -34,7 +40,6 @@ public class QueueManager {
 	public void run() throws Exception{
 		//Packet from Server
 		byte[] packetUnmarshalled = new byte[1024];
-		byte[] packetMarshalled = new byte[1024];
 		
 		RequestPacket requestPacketMarshalled = new RequestPacket();
 		Marshaller marshaller = new Marshaller();
@@ -53,13 +58,36 @@ public class QueueManager {
 					System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
 					System.out.println(requestPacketMarshalled.getBody().getMessage().getBody().toString());
 					break;
-				case "RECEIVE":
-					System.out.println("Receive message");
+				case "SUBSCRIBE":
+					System.out.println("Sent subscription");
+					System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
+					System.out.println(requestPacketMarshalled.getBody().getMessage().getBody().toString());
 					break;
+				case "CHECK":
+					System.out.println("Sent check");
+					System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
+					String user = requestPacketMarshalled.getBody().getMessage().getHeader().getDestination();
+					boolean returning = exists(user);
+					
+					ReplyPacket packet = new ReplyPacket();
+					ReplyPacketBody packetBody = new ReplyPacketBody();
+					ArrayList<Object> parameters = new ArrayList<Object>(0);
+					packetBody.setParameters(parameters);
+					packetBody.setMessage(returning);
+					
+					packet.setHeader(new ReplyPacketHeader("EXISTS"));
+					packet.setBody(packetBody);
+					
+					srh.send(marshaller.marshall((Object)packet));
+					
 				default:
 					break;
 			}
 		}
+	}
+	
+	public boolean exists(String user){
+		return false;
 	}
 	
 	public String getHost() {

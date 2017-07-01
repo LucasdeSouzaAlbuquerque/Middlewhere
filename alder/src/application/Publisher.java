@@ -61,6 +61,7 @@ public class Publisher {
 			publisher.send(message,topic,type);
 			
 		}
+		in.close();
 			
 	}
 	

@@ -18,8 +18,9 @@ import java.util.*;
 public interface IQueueManager {
 	
 	public void add(String msg, String topic, String type) throws Exception;
-	public void subscribe(String topic, String filter, String type) throws Exception;
-	public void check() throws Exception;
+	public void subscribe(ArrayList<String> topic, ArrayList<String> filter, ArrayList<String> type) throws Exception;
+	public boolean check() throws Exception;
+	public void listen() throws Exception;
 	//public void signal(boolean listening);
 	
 }
