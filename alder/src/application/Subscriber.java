@@ -1,13 +1,9 @@
 package application;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import distribution.marshaller.Marshaller;
 import distribution.queue.QueueManagerProxy;
-import distribution.request.RequestPacket;
-import infrastructure.ServerRequestHandler;
 
 /**
  * CIn - Centro de Informática
@@ -23,13 +19,10 @@ import infrastructure.ServerRequestHandler;
 
 public class Subscriber {
 	
-	String subscriberName;
-	QueueManagerProxy queueManagerProxy;
+	QueueManagerProxy queueManagerProxy;	
 	
-	
-	public Subscriber(String name) throws Exception {
-		this.queueManagerProxy = new QueueManagerProxy(name, 8080);
-		this.subscriberName = name;
+	public Subscriber(String name, int port) throws Exception {
+		this.queueManagerProxy = new QueueManagerProxy(name, port);
 	}
 	
 	public void receive() throws Exception {
@@ -49,8 +42,12 @@ public class Subscriber {
 		Scanner in = new Scanner(System.in);
 		System.out.println("Type in the name of this Subscriber Legal: ");
 		String name = in.nextLine();
-
-		Subscriber subscriber = new Subscriber(name);	
+		
+		System.out.println("Type in the port: ");
+		int port = in.nextInt();
+		in.nextLine();
+		
+		Subscriber subscriber = new Subscriber(name, port);	
 		
 		boolean exists = subscriber.check();
 		System.out.println("Exists: "+exists);
