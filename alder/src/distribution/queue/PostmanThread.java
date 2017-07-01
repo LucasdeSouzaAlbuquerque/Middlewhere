@@ -59,7 +59,7 @@ public class PostmanThread implements Runnable{
 							crh = new ClientRequestHandler(userObject.getHost(), userObject.getPort());
 
 							Message message = new Message();
-							message.setHeader(new PublisherHeader(host,object.getTopic(),object.getType()));
+							message.setHeader(new PublisherHeader(userObject.getName(),object.getTopic(),object.getType()));
 							message.setBody(new PublisherBody(object.getContent()));
 
 							RequestPacket packet = new RequestPacket();
@@ -78,8 +78,6 @@ public class PostmanThread implements Runnable{
 							}catch(IOException e){
 								e.printStackTrace();
 							}
-
-							break;
 
 						}
 
