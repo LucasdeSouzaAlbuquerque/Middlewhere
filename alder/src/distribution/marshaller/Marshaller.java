@@ -16,19 +16,20 @@ import java.io.*;
 
 public class Marshaller {
 	
-	public byte[] marshall(Object msg) throws Exception{
-		
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		return stream.toByteArray();
-		
+	public byte[] marshall(Object msg) throws Exception{	
+		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+		ObjectOutputStream outStream = new ObjectOutputStream(byteStream);
+
+		outStream.writeObject(message);
+		byte[] marshalledMessage = byteStream.toByteArray();
+
+		return marshalledMessage;
 	}
 	
 	public Object unmarshall(byte[] msg) throws Exception{
-		
 		ByteArrayInputStream stream = new ByteArrayInputStream(msg);
 		ObjectInputStream obj = new ObjectInputStream(stream);
 		return obj.readObject();
-		
 	}
 	
 	
