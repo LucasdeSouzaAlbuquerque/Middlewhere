@@ -47,7 +47,7 @@ public class QueueManagerProxy implements IQueueManager {
 		
 		packetBody.setParameters(parameters);
 		packetBody.setMessage(message);
-		packet.setHeader(new RequestPacketHeader("ADD"));;
+		packet.setHeader(new RequestPacketHeader("ADD", "localhost", queuePort));;
 		packet.setBody(packetBody);
 		
 		crh.send(marshaller.marshall((Object)packet));
@@ -72,7 +72,7 @@ public class QueueManagerProxy implements IQueueManager {
 		
 		packetBody.setParameters(parameters);
 		packetBody.setMessage(message);
-		packet.setHeader(new RequestPacketHeader("SUBSCRIBE"));;
+		packet.setHeader(new RequestPacketHeader("SUBSCRIBE", "localhost", queuePort));;
 		packet.setBody(packetBody);
 		
 		crh.send(marshaller.marshall((Object)packet));
@@ -96,7 +96,7 @@ public class QueueManagerProxy implements IQueueManager {
 		
 		packetBody.setParameters(parameters);
 		packetBody.setMessage(message);
-		packet.setHeader(new RequestPacketHeader("CHECK"));;
+		packet.setHeader(new RequestPacketHeader("CHECK", "localhost", queuePort));;
 		packet.setBody(packetBody);
 		
 		crh.send(marshaller.marshall((Object)packet));

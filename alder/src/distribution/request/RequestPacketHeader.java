@@ -17,10 +17,30 @@ import java.io.*;
 public class RequestPacketHeader implements Serializable{
 	
 	private String operation;
+	private String host;
+	private int port;
 	private static final long serialVersionUID = 1L;
 	
-	public RequestPacketHeader(String operation) {
+	public RequestPacketHeader(String operation, String host, int port) {
 		this.operation = operation;
+		this.host = host;
+		this.port = port;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 	public String getOperation() {
