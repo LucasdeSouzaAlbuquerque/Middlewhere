@@ -20,7 +20,7 @@ public class Marshaller {
 		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 		ObjectOutputStream outStream = new ObjectOutputStream(byteStream);
 
-		outStream.writeObject(message);
+		outStream.writeObject(msg);
 		byte[] marshalledMessage = byteStream.toByteArray();
 
 		return marshalledMessage;
