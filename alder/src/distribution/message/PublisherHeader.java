@@ -1,6 +1,7 @@
 package distribution.message;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * CIn - Centro de Informática
@@ -16,11 +17,11 @@ import java.io.Serializable;
 
 public class PublisherHeader extends Header implements Serializable {
 
-	private String topic;
+	private List<String> topic;
 	private String type;
 	private static final long serialVersionUID = 1L;
 
-	public PublisherHeader(String destination, String topic, String type){
+	public PublisherHeader(String destination, List<String> topic, String type){
 		super(destination);
 		this.topic = topic;
 		this.type = type;
@@ -34,11 +35,11 @@ public class PublisherHeader extends Header implements Serializable {
 		super.setDestination(destination);		
 	}
 	
-	public String getTopic() {
+	public List<String> getTopic() {
 		return topic;
 	}
 
-	public void setTopic(String topic) {
+	public void setTopic(List<String> topic) {
 		this.topic = topic;
 	}
 

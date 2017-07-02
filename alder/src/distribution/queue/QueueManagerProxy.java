@@ -35,9 +35,9 @@ public class QueueManagerProxy implements IQueueManager {
 		this.port = port;
 	}
 
-	public void add(String msg, String topic, String type) throws Exception{
+	public void add(String msg, List<String> topic, String type) throws Exception{
 
-		//TO-DO: Implement Invocation/Requestor
+		//TODO: Implement Invocation/Requestor
 
 		ClientRequestHandler crh = new ClientRequestHandler("localhost", queuePort);
 		Marshaller marshaller = new Marshaller();

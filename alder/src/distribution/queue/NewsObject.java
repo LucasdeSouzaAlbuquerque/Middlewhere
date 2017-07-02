@@ -7,12 +7,12 @@ public class NewsObject {
 	
 	private String publisherName;
 	private String type;
-	private String topic;//TODO: List
+	private List<String> topic;//TODO: List
 	private String content;
 	private long addTime;
 	private List<UserObject> userObjectList;
 	
-	public NewsObject(String publisherName, String type, String topic, String content){
+	public NewsObject(String publisherName, String type, List<String> topic, String content){
 		this.publisherName = publisherName;
 		this.type = type;
 		this.topic = topic;
@@ -45,11 +45,11 @@ public class NewsObject {
 		this.type = type;
 	}
 
-	public String getTopic() {
+	public List<String> getTopic() {
 		return topic;
 	}
 
-	public void setTopic(String topic) {
+	public void setTopic(List<String> topic) {
 		this.topic = topic;
 	}
 

@@ -29,7 +29,7 @@ public class Publisher {
 		this.queueManagerProxy = new QueueManagerProxy(publisherName, 8081);
 	}
 	
-	public void send(String message, String topic, String type) throws Exception{
+	public void send(String message, List<String> topic, String type) throws Exception{
 		this.queueManagerProxy.add(message, topic, type);
 	}
 	
@@ -53,7 +53,9 @@ public class Publisher {
 			}
 			
 			System.out.println("Type in your topic for this message!");
-			String topic = in.nextLine();
+			String topic_item = in.nextLine();
+			List<String> topic = new ArrayList<>();
+			topic.add(topic_item);
 			
 			System.out.println("Type in the type for this message");
 			String type = in.nextLine();

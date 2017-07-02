@@ -52,7 +52,7 @@ public class WelcomeThread implements Runnable{
 	
 						String publisherName =  publishHeader.getDestination();
 						String type = publishHeader.getType();
-						String topic = publishHeader.getTopic();
+						List<String> topic = publishHeader.getTopic();
 						String content = publishBody.getMessage();
 						
 						NewsObject newsObj =  new NewsObject(publisherName, type, topic, content);
@@ -143,8 +143,8 @@ public class WelcomeThread implements Runnable{
 			ArrayList<String> typeList = user.getTypeList();
 			ArrayList<String> filterList = user.getFilterList(); 
 			
-			if(hasTopicOrType(news.getTopic(), topicList) ||
-					hasTopicOrType(news.getType(), typeList) ||
+			if(hasTopic(news.getTopic(), topicList) ||
+					hasType(news.getType(), typeList) ||
 					hasFilter(news.getContent(), filterList)) {
 				news.getUserObjectList().add(user);
 			}
@@ -152,9 +152,18 @@ public class WelcomeThread implements Runnable{
 		}
 	}
 	
-	public boolean hasTopicOrType(String news, ArrayList<String> list){//TODO
-		for(String l : list){
-			if (news.equals(l)){
+	public boolean hasTopic(List<String> topicNews, ArrayList<String> topicList){
+		for (String topic : topicList){
+			if(topicNews.contains(topic)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasType(String typeNews, ArrayList<String> typeList){
+		for(String l : typeList){
+			if (typeNews.equals(l)){
 				return true;
 			}
 		}
