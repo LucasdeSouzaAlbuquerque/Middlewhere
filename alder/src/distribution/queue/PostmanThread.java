@@ -56,29 +56,30 @@ public class PostmanThread implements Runnable{
 						for(int i = 0; i < object.getUserObjectList().size(); i++){
 							
 							userObject = object.getUserObjectList().get(i);
-							crh = new ClientRequestHandler(userObject.getHost(), userObject.getPort());
-
-							Message message = new Message();
-							message.setHeader(new PublisherHeader(userObject.getName(),object.getTopic(),object.getType()));
-							message.setBody(new PublisherBody(object.getContent()));
-
-							RequestPacket packet = new RequestPacket();
-							RequestPacketBody packetBody = new RequestPacketBody();
-							ArrayList<Object> parameters = new ArrayList<Object>(0);
-
-							packetBody.setParameters(parameters);
-							packetBody.setMessage(message);
-
-							packet.setHeader(new RequestPacketHeader("SEND", userObject.getHost(), userObject.getPort()));
-							packet.setBody(packetBody);
-
-							try{
-								crh.send(marshaller.marshall((Object)packet));
-								object.getUserObjectList().set(i, null);
-							}catch(IOException e){
-								e.printStackTrace();
+							if(userObject != null){
+								crh = new ClientRequestHandler(userObject.getHost(), userObject.getPort());
+	
+								Message message = new Message();
+								message.setHeader(new PublisherHeader(userObject.getName(),object.getTopic(),object.getType()));
+								message.setBody(new PublisherBody(object.getContent()));
+	
+								RequestPacket packet = new RequestPacket();
+								RequestPacketBody packetBody = new RequestPacketBody();
+								ArrayList<Object> parameters = new ArrayList<Object>(0);
+	
+								packetBody.setParameters(parameters);
+								packetBody.setMessage(message);
+	
+								packet.setHeader(new RequestPacketHeader("SEND", userObject.getHost(), userObject.getPort()));
+								packet.setBody(packetBody);
+	
+								try{
+									crh.send(marshaller.marshall((Object)packet));
+									object.getUserObjectList().set(i, null);
+								}catch(IOException e){
+									
+								}
 							}
-
 						}
 
 					}

@@ -89,9 +89,9 @@ public class Subscriber {
 			}
 			
 			subscriber.subscribe(topicList, filterList, typeList);
-			subscriber.receive();
 			
 		}
+		subscriber.receive();
 		in.close();
 		
 	}

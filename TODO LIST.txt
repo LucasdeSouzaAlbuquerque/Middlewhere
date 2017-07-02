@@ -1,0 +1,23 @@
+PUBLISHER
+---------
+> Deixar 'port' como valor variável (Funcionalidade) (Aparentemente Feito)
+> Transformar tópico em lista de tags. (Funcionalidade)
+> Detalhar básicos de tipo pra aplicação. (Aplicação mais legível)
+> Publisher definir tempo de vida da mensagem. (Trabalho futuro)
+
+SUBSCRIBER
+----------
+> Deixar 'port' como valor variável (Funcionalidade) (Aparentemente Feito)
+
+GERAL
+-----
+> Ter prints mais bonitos pra identificar coisas (Aplicação mais legível)
+> Cálculo de port automático para ClientProxy (Funcionalidade)
+> Jeito fácil de mudar port/ip de servidor
+> Se der, adicionar Requestor e Invoker (Estrutura)
+
+TESTES
+------
+> Time-out de mensagem/mandar mensagem para alguém que está off-line (Aparentemente feito)
+> Teste com multiplos Subscribers/multiplos Publishers (Aparentemente feito)
+> Teste em duas máquinas diferentes

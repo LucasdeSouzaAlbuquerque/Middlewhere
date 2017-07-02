@@ -46,6 +46,7 @@ public class WelcomeThread implements Runnable{
 						System.out.println("Sent message");
 						System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
 						System.out.println(requestPacketMarshalled.getBody().getMessage().getBody().toString());
+						System.out.println("###");
 						PublisherHeader publishHeader = (PublisherHeader) requestPacketMarshalled.getBody().getMessage().getHeader();
 						PublisherBody publishBody = (PublisherBody) requestPacketMarshalled.getBody().getMessage().getBody();
 	
@@ -63,9 +64,11 @@ public class WelcomeThread implements Runnable{
 						
 					case "SUBSCRIBE":
 						System.out.println("Sent subscription");
-						System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
-						System.out.println(requestPacketMarshalled.getBody().getMessage().getBody().toString());
-	
+						System.out.println(((SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody()).getTopicList());
+						System.out.println(((SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody()).getFilterList());
+						System.out.println(((SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody()).getTypeList());
+						System.out.println("###");
+						
 						SubscriberBody requestPacketBody = (SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody();
 	
 						int port = requestPacketMarshalled.getHeader().getPort();
@@ -81,8 +84,8 @@ public class WelcomeThread implements Runnable{
 						
 					case "CHECK":
 						System.out.println("Sent check");
-						System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
 						String user = requestPacketMarshalled.getBody().getMessage().getHeader().getDestination();
+						System.out.println(user + " - CHECK");
 						String userHost = requestPacketMarshalled.getHeader().getHost();
 						int userPort = requestPacketMarshalled.getHeader().getPort();
 						

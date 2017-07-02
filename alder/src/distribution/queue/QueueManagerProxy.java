@@ -112,7 +112,7 @@ public class QueueManagerProxy implements IQueueManager {
 		packetUnmarshalled = crh.receive();
 		replyPacketMarshalled = (ReplyPacket) marshaller.unmarshall(packetUnmarshalled);
 
-		return false;
+		return replyPacketMarshalled.getBody().getMessage();
 
 	}
 
@@ -133,8 +133,6 @@ public class QueueManagerProxy implements IQueueManager {
 				switch (requestPacketMarshalled.getHeader().getOperation()) {
 					case "SEND":
 						System.out.println("Sent message");
-						System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
-						System.out.println(requestPacketMarshalled.getBody().getMessage().getBody().toString());
 						System.out.println(((PublisherBody) requestPacketMarshalled.getBody().getMessage().getBody()).getMessage());
 						break;
 					default:
