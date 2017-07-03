@@ -37,31 +37,31 @@ public class PostmanThread implements Runnable{
 
 				Thread.sleep(100);			
 
-				for(NewsObject object: news){
-
+				for(NewsObject newsItem: news){
 					long currTime = System.currentTimeMillis();
-					boolean allNull = true;
+					boolean existsUserToSendNews = existsUserToSendNews(newsItem.getUserObjectList());
 					
-					for(UserObject userObject: object.getUserObjectList()){
-						if(userObject != null){
-							allNull = false;
-							break;
-						}
-					}
+//					for(UserObject userObject: newsItem.getUserObjectList()){
+//						if(userObject != null){
+//							existsUserToSendNews = true;
+//							break;
+//						}
+//					}
 					
-					if(currTime - object.getAddTime() > 100000 || allNull){
-						object = null;
+					//Verify if message timeout is valid or if exists users to send news 
+					if(currTime - newsItem.getAddTime() > 100000 || !existsUserToSendNews){
+						newsItem = null;
 					}else{
 						UserObject userObject;
-						for(int i = 0; i < object.getUserObjectList().size(); i++){
+						for(int i = 0; i < newsItem.getUserObjectList().size(); i++){
+							userObject = newsItem.getUserObjectList().get(i);
 							
-							userObject = object.getUserObjectList().get(i);
 							if(userObject != null){
 								crh = new ClientRequestHandler(userObject.getHost(), userObject.getPort());
 	
 								Message message = new Message();
-								message.setHeader(new PublisherHeader(userObject.getName(),object.getTopic(),object.getType()));
-								message.setBody(new PublisherBody(object.getContent()));
+								message.setHeader(new PublisherHeader(userObject.getName(),newsItem.getTopic(),newsItem.getType()));
+								message.setBody(new PublisherBody(newsItem.getContent()));
 	
 								RequestPacket packet = new RequestPacket();
 								RequestPacketBody packetBody = new RequestPacketBody();
@@ -69,26 +69,34 @@ public class PostmanThread implements Runnable{
 	
 								packetBody.setParameters(parameters);
 								packetBody.setMessage(message);
-	
 								packet.setHeader(new RequestPacketHeader("SEND", userObject.getHost(), userObject.getPort()));
 								packet.setBody(packetBody);
 	
 								try{
 									crh.send(marshaller.marshall((Object)packet));
-									object.getUserObjectList().set(i, null);
+									newsItem.getUserObjectList().set(i, null);
 								}catch(IOException e){
 									
 								}
 							}
 						}
-
 					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
-
+	
+	public boolean existsUserToSendNews(List<UserObject> userList){
+		boolean existsUserToSendNews = false;
+		
+		for(UserObject user: userList){
+			if(user != null){
+				existsUserToSendNews = true;
+				break;
+			}
+		}	
+		return existsUserToSendNews;
+	}
 }

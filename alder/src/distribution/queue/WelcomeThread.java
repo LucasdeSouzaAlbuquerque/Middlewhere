@@ -1,5 +1,7 @@
 package distribution.queue;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,21 +34,16 @@ public class WelcomeThread implements Runnable{
 		RequestPacket requestPacketMarshalled = new RequestPacket();
 		Marshaller marshaller = new Marshaller();
 		ServerRequestHandler srh;
-		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
 		try {
 			srh = new ServerRequestHandler(this.port);
 			while(true){
-				System.out.println("Running, running, running");
-
 				packetUnmarshalled = srh.receive();
 				requestPacketMarshalled = (RequestPacket) marshaller.unmarshall(packetUnmarshalled);
 
 				switch (requestPacketMarshalled.getHeader().getOperation()) {
 					case "ADD":
-						System.out.println("Sent message");
-						System.out.println(requestPacketMarshalled.getBody().getMessage().getHeader().toString());
-						System.out.println(requestPacketMarshalled.getBody().getMessage().getBody().toString());
-						System.out.println("###");
 						PublisherHeader publishHeader = (PublisherHeader) requestPacketMarshalled.getBody().getMessage().getHeader();
 						PublisherBody publishBody = (PublisherBody) requestPacketMarshalled.getBody().getMessage().getBody();
 	
@@ -57,18 +54,19 @@ public class WelcomeThread implements Runnable{
 						
 						NewsObject newsObj =  new NewsObject(publisherName, type, topic, content);
 						checkRelevance(newsObj);
-						
 						news.add(newsObj);
 						
+						System.out.println("[Add Message] " + dtf.format(LocalDateTime.now()));
+						System.out.println("  Publisher Info .:.:.:.:.:.:.:.:.:.:.:.:.:.:");
+						System.out.println("           Name: " + publisherName);
+						System.out.println("           Type: " + type);
+						System.out.println("           Topic: " + topic.toString());
+						System.out.println("           Message: " + content);
+						System.out.println();
+
 						break;
 						
-					case "SUBSCRIBE":
-						System.out.println("Sent subscription");
-						System.out.println(((SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody()).getTopicList());
-						System.out.println(((SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody()).getFilterList());
-						System.out.println(((SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody()).getTypeList());
-						System.out.println("###");
-						
+					case "SUBSCRIBE":					
 						SubscriberBody requestPacketBody = (SubscriberBody) requestPacketMarshalled.getBody().getMessage().getBody();
 	
 						int port = requestPacketMarshalled.getHeader().getPort();
@@ -80,36 +78,47 @@ public class WelcomeThread implements Runnable{
 	
 						UserObject userObj = new UserObject(name, host, port, topicList, filterList, typeList);
 						users.add(userObj);
+						
+						System.out.println("[Subscribe Message] " + dtf.format(LocalDateTime.now()));
+						System.out.println("  Subscribe Info .:.:.:.:.:.:.:.:.:.:.:.:.:.:");
+						System.out.println("           Name: " + name);
+						System.out.println("           Type(s): " + typeList);
+						System.out.println("           Topic(s): " + topicList);
+						System.out.println("           Filter(s): " + filterList);
+						System.out.println();
+						
 						break;
 						
 					case "CHECK":
-						System.out.println("Sent check");
 						String user = requestPacketMarshalled.getBody().getMessage().getHeader().getDestination();
-						System.out.println(user + " - CHECK");
 						String userHost = requestPacketMarshalled.getHeader().getHost();
 						int userPort = requestPacketMarshalled.getHeader().getPort();
-						
 						boolean exists = exists(user);
 	
 						if(exists) {
-							for(UserObject object: users){
-								if(object.getName().equals(user)){
-									object.setHost(userHost);
-									object.setPort(userPort);
-								}
-							}
+							updateHostAndPortUser(user, userHost, userPort);
 						}
 	
 						ReplyPacket packet = new ReplyPacket();
 						ReplyPacketBody packetBody = new ReplyPacketBody();
 						ArrayList<Object> parameters = new ArrayList<Object>(0);
+						
 						packetBody.setParameters(parameters);
 						packetBody.setMessage(exists);
-	
 						packet.setHeader(new ReplyPacketHeader("EXISTS"));
 						packet.setBody(packetBody);
 	
 						srh.send(marshaller.marshall((Object)packet));
+						
+						System.out.println("[Check User] " + dtf.format(LocalDateTime.now()));
+						System.out.println("  .:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:.:");
+						if(exists){
+							System.out.println("           User " + user + " already added!");
+						} else {
+							System.out.println("           Adding new user ");
+						}
+						System.out.println();
+						
 						break;
 	
 					 default:
@@ -122,7 +131,6 @@ public class WelcomeThread implements Runnable{
 	}
 	
 	public synchronized boolean exists(String userCheck){
-
 		Iterator<UserObject> i = users.iterator(); 
 
 		while (i.hasNext()){
@@ -177,5 +185,14 @@ public class WelcomeThread implements Runnable{
 			}
 		}
 		return false;
+	}
+	
+	public void updateHostAndPortUser(String user, String userHost, int userPort){
+		for(UserObject object: this.users){
+			if(object.getName().equals(user)){
+				object.setHost(userHost);
+				object.setPort(userPort);
+			}
+		}
 	}
 }

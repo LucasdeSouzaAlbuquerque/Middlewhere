@@ -18,7 +18,7 @@ public class QueueServer {
 	
 	public static void main(String[] args) throws Exception {
 		
-		System.out.println("Criei o servidor de filas/tópicos sei lá buguei legal ahaiii mensagem de teste");
+		System.out.println("Started server...");
 		QueueManager queueManager = new QueueManager(port);
 		queueManager.run();
 		

@@ -36,8 +36,8 @@ public class QueueManager {
 	private List<NewsObject> news;	
 
 	public QueueManager(int port) throws Exception{
-		this.host = InetAddress.getLocalHost().getHostName();
 		this.port = port;
+		this.host = InetAddress.getLocalHost().getHostName();
 		this.users = Collections.synchronizedList(new ArrayList<UserObject>());
 		this.news = Collections.synchronizedList(new ArrayList<NewsObject>());
 	}
@@ -59,10 +59,6 @@ public class QueueManager {
 			}
 		}
 		return false;
-	}
-
-	public void updateHostAndPort(String host, int port){
-		//TODO
 	}
 
 	public String getHost() {

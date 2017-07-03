@@ -50,8 +50,7 @@ public class Subscriber {
 		Subscriber subscriber = new Subscriber(name, port);	
 		
 		boolean exists = subscriber.check();
-		System.out.println("Exists: "+exists);
-		
+
 		if(!exists){
 			ArrayList<String> topicList = new ArrayList<String>();
 			while(true){
@@ -88,12 +87,9 @@ public class Subscriber {
 				typeList.add(type);			
 			}
 			
-			subscriber.subscribe(topicList, filterList, typeList);
-			
+			subscriber.subscribe(topicList, filterList, typeList);	
 		}
 		subscriber.receive();
-		in.close();
-		
+		in.close();	
 	}
-	
 }

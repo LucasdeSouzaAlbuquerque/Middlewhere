@@ -8,6 +8,7 @@ import distribution.reply.ReplyPacket;
 
 import java.io.*;
 import java.net.InetAddress;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -83,7 +84,6 @@ public class QueueManagerProxy implements IQueueManager {
 		crh.send(marshaller.marshall((Object)packet));
 
 		return;
-
 	}
 
 	public boolean check() throws Exception{
@@ -113,7 +113,6 @@ public class QueueManagerProxy implements IQueueManager {
 		replyPacketMarshalled = (ReplyPacket) marshaller.unmarshall(packetUnmarshalled);
 
 		return replyPacketMarshalled.getBody().getMessage();
-
 	}
 
 	@Override
@@ -127,13 +126,21 @@ public class QueueManagerProxy implements IQueueManager {
 		try {
 			srh = new ServerRequestHandler(this.port);
 			while(true){
+				System.out.println("Waiting News...  ");
+
 				packetUnmarshalled = srh.receive();
 				requestPacketMarshalled = (RequestPacket) marshaller.unmarshall(packetUnmarshalled);
 				
 				switch (requestPacketMarshalled.getHeader().getOperation()) {
 					case "SEND":
-						System.out.println("Sent message");
-						System.out.println(((PublisherBody) requestPacketMarshalled.getBody().getMessage().getBody()).getMessage());
+						String publisherName = ((PublisherHeader) requestPacketMarshalled.getBody().getMessage().getHeader()).getDestination();
+						String message = ((PublisherBody) requestPacketMarshalled.getBody().getMessage().getBody()).getMessage();
+						
+						System.out.println("[Message Received]:");
+						System.out.println("  Publisher: " + publisherName);
+						System.out.println("  Message: " + message);
+						System.out.println();
+						
 						break;
 					default:
 						break;
