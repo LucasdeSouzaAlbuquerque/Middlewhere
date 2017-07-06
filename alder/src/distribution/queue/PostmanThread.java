@@ -1,6 +1,8 @@
 package distribution.queue;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +17,17 @@ import infrastructure.ClientRequestHandler;
 
 public class PostmanThread implements Runnable{
 	private List<NewsObject> news;
-	private String host;
-	private int port;
+	DateTimeFormatter dtf;
 
-	public PostmanThread(List<NewsObject> news, String host, int serverPort){
+	public PostmanThread(List<NewsObject> news){
 		this.news = news;
-		this.host = host;
-		this.port = serverPort;
+		this.dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	}
 
 	@Override
 	public void run() {
 
 		try{
-			byte[] packetUnmarshalled = new byte[1024];
-			RequestPacket requestPacketMarshalled = new RequestPacket();
 			Marshaller marshaller = new Marshaller();
 			ClientRequestHandler crh;
 
@@ -40,13 +38,6 @@ public class PostmanThread implements Runnable{
 				for(NewsObject newsItem: news){
 					long currTime = System.currentTimeMillis();
 					boolean existsUserToSendNews = existsUserToSendNews(newsItem.getUserObjectList());
-					
-//					for(UserObject userObject: newsItem.getUserObjectList()){
-//						if(userObject != null){
-//							existsUserToSendNews = true;
-//							break;
-//						}
-//					}
 					
 					//Verify if message timeout is valid or if exists users to send news 
 					if(currTime - newsItem.getAddTime() > 100000 || !existsUserToSendNews){
@@ -60,23 +51,28 @@ public class PostmanThread implements Runnable{
 								crh = new ClientRequestHandler(userObject.getHost(), userObject.getPort());
 	
 								Message message = new Message();
-								message.setHeader(new PublisherHeader(userObject.getName(),newsItem.getTopic(),newsItem.getType()));
+								message.setHeader(new PublisherHeader(userObject.getName(), newsItem.getTopic(), newsItem.getType()));
 								message.setBody(new PublisherBody(newsItem.getContent()));
 	
 								RequestPacket packet = new RequestPacket();
 								RequestPacketBody packetBody = new RequestPacketBody();
+								RequestPacketHeader packetHeader = new RequestPacketHeader("SEND", userObject.getHost(), userObject.getPort());
 								ArrayList<Object> parameters = new ArrayList<Object>(0);
 	
 								packetBody.setParameters(parameters);
 								packetBody.setMessage(message);
-								packet.setHeader(new RequestPacketHeader("SEND", userObject.getHost(), userObject.getPort()));
+								packet.setHeader(packetHeader);
 								packet.setBody(packetBody);
 	
 								try{
 									crh.send(marshaller.marshall((Object)packet));
 									newsItem.getUserObjectList().set(i, null);
-								}catch(IOException e){
 									
+									System.out.println("[Send Message] " + dtf.format(LocalDateTime.now()));
+									System.out.println("  Sendig message to " + userObject.getName());
+									System.out.println();
+								}catch(IOException e){
+									//TODO: Tratar exception quando subcriber tiver off!
 								}
 							}
 						}

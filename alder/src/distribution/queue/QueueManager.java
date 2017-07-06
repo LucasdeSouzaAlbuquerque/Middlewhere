@@ -44,7 +44,7 @@ public class QueueManager {
 
 	public void run() {
 		WelcomeThread welcomeThread = new WelcomeThread(users, news, port);
-		PostmanThread postmanThread = new PostmanThread(news, host, port);
+		PostmanThread postmanThread = new PostmanThread(news);
 		new Thread (welcomeThread).start();
 		new Thread (postmanThread).start();
 	}

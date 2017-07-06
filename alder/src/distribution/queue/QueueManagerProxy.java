@@ -126,7 +126,7 @@ public class QueueManagerProxy implements IQueueManager {
 		try {
 			srh = new ServerRequestHandler(this.port);
 			while(true){
-				System.out.println("Waiting News...  ");
+				System.out.println(" .:.:.:.:.:.:.:.: Waiting for news .:.:.:.:.:.:.:.:");
 
 				packetUnmarshalled = srh.receive();
 				requestPacketMarshalled = (RequestPacket) marshaller.unmarshall(packetUnmarshalled);
@@ -136,7 +136,7 @@ public class QueueManagerProxy implements IQueueManager {
 						String publisherName = ((PublisherHeader) requestPacketMarshalled.getBody().getMessage().getHeader()).getDestination();
 						String message = ((PublisherBody) requestPacketMarshalled.getBody().getMessage().getBody()).getMessage();
 						
-						System.out.println("[Message Received]:");
+						System.out.println("[Message Received]");
 						System.out.println("  Publisher: " + publisherName);
 						System.out.println("  Message: " + message);
 						System.out.println();

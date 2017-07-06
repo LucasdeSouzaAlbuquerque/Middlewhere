@@ -20,12 +20,14 @@ public class WelcomeThread implements Runnable{
 	
 	private List<UserObject> users;
 	private List<NewsObject> news;
+	DateTimeFormatter dtf;
 	int port;
 	
 	public WelcomeThread(List<UserObject> users, List<NewsObject> news, int port){
 		this.users = users;
 		this.news = news;
 		this.port = port;
+		this.dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	}
 	
 	@Override
@@ -34,7 +36,6 @@ public class WelcomeThread implements Runnable{
 		RequestPacket requestPacketMarshalled = new RequestPacket();
 		Marshaller marshaller = new Marshaller();
 		ServerRequestHandler srh;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
 		try {
 			srh = new ServerRequestHandler(this.port);
